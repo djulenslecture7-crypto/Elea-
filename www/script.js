@@ -7,7 +7,7 @@ const statusText=document.getElementById("statusText");
 const sidebar=document.getElementById("sidebar");
 
 // 👉 Remplace par l'URL de ton déploiement Vercel (ex: "https://elea-app.vercel.app")
-const API_BASE_URL = "https://TON-PROJET.vercel.app";
+const API_BASE_URL = "https://elea-eight.vercel.app";
 
 // Historique de conversation, persisté sur l'appareil pour qu'Eléa "se souvienne" entre deux ouvertures de l'app
 let conversationHistory = JSON.parse(localStorage.getItem("elea-history") || "[]");
