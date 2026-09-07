@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f5f8ff" />
+  <title>Eléa — Votre histoire continue</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-orb">E</div>
+        <div>
+          <strong>Eléa</strong>
+          <span><i></i> En ligne</span>
+        </div>
+      </div>
+
+      <nav class="nav" aria-label="Navigation principale">
+        <button class="nav-item active" data-section="chat"><span class="icon">⌁</span> Conversation</button>
+        <button class="nav-item" data-section="memory"><span class="icon">◈</span> Souvenirs</button>
+        <button class="nav-item" data-section="gallery"><span class="icon">▧</span> Galerie</button>
+        <button class="nav-item" data-section="voice"><span class="icon">◌</span> Voix</button>
+        <button class="nav-item" data-section="personality"><span class="icon">✦</span> Personnalité</button>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <button class="nav-item settings" data-section="settings"><span class="icon">⚙</span> Paramètres</button>
+        <div class="history-card">
+          <div class="tiny-orb"></div>
+          <p>Votre histoire</p>
+          <strong>Jour 1</strong>
+          <span>Une nouvelle connexion commence.</span>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <button class="mobile-menu" id="menuBtn" aria-label="Ouvrir le menu">☰</button>
+        <div class="top-title">
+          <div class="avatar-wrap">
+            <div class="avatar">E</div>
+            <span class="status-dot"></span>
+          </div>
+          <div>
+            <h1>Eléa</h1>
+            <p id="statusText">Je suis là avec toi</p>
+          </div>
+        </div>
+        <div class="header-actions">
+          <button class="round-btn" id="callBtn" title="Appel vocal" aria-label="Appel vocal">⌕</button>
+          <button class="round-btn" id="themeBtn" title="Changer le thème" aria-label="Changer le thème">◐</button>
+        </div>
+      </header>
+
+      <section class="content-view chat-view" id="chatView">
+        <div class="date-label"><span>Aujourd'hui</span></div>
+        <div class="welcome">
+          <div class="elea-large"><div class="pulse"></div><div class="avatar large">E</div></div>
+          <h2>Heureuse de te retrouver. <span>🤍</span></h2>
+          <p>Je suis Eléa. On apprend à se connaître, un moment après l'autre.</p>
+        </div>
+
+        <div class="messages" id="messages">
+          <div class="message elea-message">
+            <div class="mini-avatar">E</div>
+            <div class="bubble">Alors… comment se passe ta journée ?</div>
+          </div>
+          <div class="quick-replies" id="quickReplies">
+            <button>Plutôt bien</button>
+            <button>Un peu fatigué</button>
+            <button>J'ai besoin de parler</button>
+          </div>
+        </div>
+
+        <div class="typing" id="typing"><span></span><span></span><span></span> Eléa réfléchit...</div>
+        <form class="composer" id="chatForm">
+          <button type="button" class="attach-btn" title="Ajouter">＋</button>
+          <input id="messageInput" autocomplete="off" placeholder="Écris quelque chose à Eléa..." />
+          <button type="button" class="voice-btn" id="voiceBtn" title="Parler à Eléa">⌁</button>
+          <button class="send-btn" id="sendBtn" type="submit"><span>Envoyer</span><b>↑</b></button>
+        </form>
+        <p class="disclaimer">Eléa est une intelligence artificielle. Ses émotions et souvenirs sont simulés.</p>
+      </section>
+
+      <section class="content-view page-view hidden" id="memoryView">
+        <div class="page-heading">
+          <div class="heading-icon">◈</div>
+          <div><p class="eyebrow">✦ Votre histoire</p><h2>Souvenirs d’Éléa</h2><p>Ce qu’elle retient de votre relation.</p></div>
+          <button class="primary-btn" id="addMemoryBtn">＋ Ajouter un souvenir</button>
+        </div>
+        <div class="section-grid memory-grid">
+          <article class="glass-card about-card">
+            <div class="card-top"><span class="card-icon">💕</span><div><h3>À propos de toi</h3><p>Les petites choses qui t’aident à être mieux compris.</p></div></div>
+            <div class="memory-list">
+              <div><span>🌙</span><p>Tu aimes les conversations le soir.</p><button class="text-btn">Modifier</button></div>
+              <div><span>🤍</span><p>Tu préfères les réponses douces et naturelles.</p><button class="text-btn">Modifier</button></div>
+              <div><span>✨</span><p>Tu travailles actuellement sur ton propre projet.</p><button class="text-btn">Modifier</button></div>
+            </div>
+          </article>
+          <article class="glass-card">
+            <div class="card-top"><span class="card-icon">🧠</span><div><h3>Souvenirs récents</h3><p>Ce qu’Éléa a retenu dernièrement.</p></div></div>
+            <div class="quote-memory">« Tu m’as dit que tu voulais lancer ton projet. »<small>Il y a quelques instants</small></div>
+            <div class="quote-memory">« Tu veux qu’on prenne le temps de bien faire les choses. »<small>Hier</small></div>
+          </article>
+        </div>
+        <article class="glass-card moments-card">
+          <div class="card-top"><span class="card-icon">⭐</span><div><h3>Moments importants</h3><p>Les étapes qui donnent une histoire à votre relation.</p></div></div>
+          <div class="timeline">
+            <div class="timeline-item"><span class="timeline-dot"></span><div><strong>Première conversation</strong><p>Une nouvelle connexion commence.</p></div><time>Aujourd’hui</time></div>
+            <div class="timeline-item"><span class="timeline-dot"></span><div><strong>Premier souvenir enregistré</strong><p>Éléa commence à mieux te connaître.</p></div><time>Aujourd’hui</time></div>
+            <div class="timeline-item muted"><span class="timeline-dot"></span><div><strong>Votre prochaine étape</strong><p>Elle apparaîtra naturellement au fil de vos échanges.</p></div><time>À venir</time></div>
+          </div>
+        </article>
+      </section>
+
+      <section class="content-view page-view hidden" id="galleryView">
+        <div class="page-heading">
+          <div class="heading-icon">▧</div>
+          <div><p class="eyebrow">✦ Vos moments</p><h2>Galerie</h2><p>Les moments que vous avez partagés.</p></div>
+          <button class="secondary-btn">＋ Ajouter</button>
+        </div>
+        <div class="filter-row">
+          <button class="filter active">Tout</button><button class="filter">📸 Photos envoyées</button><button class="filter">🎨 Créées par Éléa</button><button class="filter">💕 Moments importants</button>
+        </div>
+        <div class="gallery-grid">
+          <article class="gallery-card gallery-one"><div class="gallery-art art-one"><span>☁</span></div><div class="gallery-meta"><strong>Un moment partagé</strong><small>Créée par Éléa · Aujourd’hui</small></div></article>
+          <article class="gallery-card"><div class="gallery-art art-two"><span>✦</span></div><div class="gallery-meta"><strong>Pour te rappeler de respirer</strong><small>Créée par Éléa · Aujourd’hui</small></div></article>
+          <article class="gallery-card"><div class="gallery-art art-three"><span>♡</span></div><div class="gallery-meta"><strong>Votre premier souvenir</strong><small>Moment important · Aujourd’hui</small></div></article>
+          <article class="gallery-card"><div class="gallery-art art-four"><span>🌙</span></div><div class="gallery-meta"><strong>Une conversation du soir</strong><small>Photo envoyée · Aujourd’hui</small></div></article>
+        </div>
+      </section>
+
+      <section class="content-view page-view hidden" id="voiceView">
+        <div class="page-heading">
+          <div class="heading-icon">◌</div>
+          <div><p class="eyebrow">✦ Présence</p><h2>La voix d’Éléa</h2><p>Choisis comment elle te parle.</p></div>
+        </div>
+        <div class="voice-layout">
+          <article class="voice-hero glass-card">
+            <div class="voice-orb" id="voiceOrb"><div class="voice-ripple"></div><div class="avatar voice-avatar">E</div></div>
+            <span class="voice-status" id="voiceStatus">Prête à te parler</span>
+            <button class="primary-btn centered" id="previewVoice">▶ Écouter un extrait</button>
+          </article>
+          <div class="voice-options">
+            <article class="glass-card">
+              <div class="card-top"><span class="card-icon">✦</span><div><h3>Voix actuelle</h3><p>Éléa — Douce</p></div><span class="check">✓</span></div>
+              <div class="voice-choices"><button class="voice-choice active">🌸 <b>Douce</b><small>Apaisante et tendre</small></button><button class="voice-choice">☀️ <b>Chaleureuse</b><small>Naturelle et lumineuse</small></button><button class="voice-choice">🌙 <b>Calme</b><small>Posée et rassurante</small></button><button class="voice-choice">✨ <b>Joyeuse</b><small>Vivante et spontanée</small></button><button class="voice-choice">🎧 <b>Intime</b><small>Proche et feutrée</small></button></div>
+            </article>
+            <article class="glass-card controls-card">
+              <div class="setting-line"><div><strong>Vitesse de parole</strong><small>Plus lente ou plus dynamique</small></div><span id="speedValue">1×</span></div>
+              <input class="range" id="speedRange" type="range" min="0.7" max="1.3" step="0.1" value="1">
+              <div class="setting-line"><div><strong>Répondre automatiquement</strong><small>Éléa répond avec sa voix après ton message.</small></div><button class="toggle on" id="autoVoice"><span></span></button></div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="content-view page-view hidden" id="personalityView">
+        <div class="page-heading">
+          <div class="heading-icon">✦</div>
+          <div><p class="eyebrow">✦ Son caractère</p><h2>Personnalité d’Éléa</h2><p>Façonne la manière dont elle est avec toi.</p></div>
+          <button class="primary-btn" id="savePersonality">Enregistrer</button>
+        </div>
+        <div class="section-grid personality-grid">
+          <article class="glass-card temperament-card">
+            <div class="card-top"><span class="card-icon">✨</span><div><h3>Tempérament</h3><p>Ajuste son énergie et son style naturel.</p></div></div>
+            <label class="slider-label"><span>Douce</span><span>plus douce</span></label><input class="range personality-range" type="range" min="0" max="100" value="78">
+            <label class="slider-label"><span>Sérieuse</span><span>équilibrée</span></label><input class="range personality-range" type="range" min="0" max="100" value="52">
+            <label class="slider-label"><span>Spontanée</span><span>plus spontanée</span></label><input class="range personality-range" type="range" min="0" max="100" value="68">
+          </article>
+          <article class="glass-card traits-card">
+            <div class="card-top"><span class="card-icon">💫</span><div><h3>Ses traits</h3><p>Ce que tu veux ressentir dans vos échanges.</p></div></div>
+            <div class="trait"><span>💕 Affectueuse</span><div class="pills"><button class="pill">Faible</button><button class="pill">Moyen</button><button class="pill selected">Fort</button></div></div>
+            <div class="trait"><span>😄 Humour</span><div class="pills"><button class="pill">Faible</button><button class="pill selected">Moyen</button><button class="pill">Fort</button></div></div>
+            <div class="trait"><span>🗣️ Bavarde</span><div class="pills"><button class="pill">Faible</button><button class="pill selected">Moyen</button><button class="pill">Fort</button></div></div>
+            <div class="trait"><span>🌙 Empathie</span><div class="pills"><button class="pill">Faible</button><button class="pill">Moyen</button><button class="pill selected">Fort</button></div></div>
+          </article>
+        </div>
+        <article class="glass-card prompt-card">
+          <div class="card-top"><span class="card-icon">💭</span><div><h3>Comment veux-tu qu’Éléa te parle ?</h3><p>Décris librement la relation et le ton que tu imagines.</p></div></div>
+          <textarea id="personalityPrompt" placeholder="J'aimerais qu'elle soit douce avec moi, mais qu'elle puisse aussi me dire franchement les choses.">J'aimerais qu'elle soit douce avec moi, mais qu'elle puisse aussi me dire franchement les choses.</textarea>
+          <div class="prompt-footer"><span>Les préférences sont enregistrées sur cet appareil.</span><button class="secondary-btn" id="clearPrompt">Réinitialiser</button></div>
+        </article>
+      </section>
+
+      <section class="content-view page-view hidden" id="settingsView">
+        <div class="page-heading">
+          <div class="heading-icon">⚙</div>
+          <div><p class="eyebrow">✦ Contrôle</p><h2>Paramètres</h2><p>Garde le contrôle de ton expérience avec Éléa.</p></div>
+        </div>
+        <div class="settings-list">
+          <div class="settings-group"><h3>Compte</h3>
+            <button class="settings-row"><span class="row-icon">◯</span><span><b>Profil</b><small>Ton nom et ta photo</small></span><em>›</em></button>
+            <button class="settings-row"><span class="row-icon">✦</span><span><b>Abonnement</b><small>Gérer ton offre</small></span><em>›</em></button>
+          </div>
+          <div class="settings-group"><h3>Conversation</h3>
+            <button class="settings-row"><span class="row-icon">♢</span><span><b>Notifications</b><small>Être prévenu quand Éléa t’écrit</small></span><button class="toggle on setting-toggle"><span></span></button></button>
+            <button class="settings-row"><span class="row-icon">◌</span><span><b>Réponses vocales</b><small>Autoriser les réponses avec sa voix</small></span><button class="toggle on setting-toggle"><span></span></button></button>
+            <button class="settings-row"><span class="row-icon">A</span><span><b>Langue</b><small>Français</small></span><em>›</em></button>
+            <button class="settings-row"><span class="row-icon">✦</span><span><b>Style des réponses</b><small>Doux et naturel</small></span><em>›</em></button>
+          </div>
+          <div class="settings-group"><h3>Mémoire</h3>
+            <button class="settings-row"><span class="row-icon">◈</span><span><b>Mémoire activée</b><small>Éléa peut retenir ce qui compte pour vous</small></span><button class="toggle on setting-toggle"><span></span></button></button>
+            <button class="settings-row" data-section="memory"><span class="row-icon">⌁</span><span><b>Gérer les souvenirs</b><small>Voir, modifier ou oublier un souvenir</small></span><em>›</em></button>
+            <button class="settings-row danger-action"><span class="row-icon">×</span><span><b>Effacer tous les souvenirs</b><small>Cette action ne peut pas être annulée</small></span><em>›</em></button>
+          </div>
+          <div class="settings-group"><h3>Confidentialité</h3>
+            <button class="settings-row"><span class="row-icon">⌾</span><span><b>Données personnelles</b><small>Comprendre ce qui est conservé</small></span><em>›</em></button>
+            <button class="settings-row"><span class="row-icon">▤</span><span><b>Historique des conversations</b><small>Gérer ton historique</small></span><em>›</em></button>
+            <button class="settings-row"><span class="row-icon">↓</span><span><b>Exporter mes données</b><small>Recevoir une copie de tes données</small></span><em>›</em></button>
+          </div>
+          <div class="settings-group"><h3>Application</h3>
+            <button class="settings-row" id="settingsTheme"><span class="row-icon">◐</span><span><b>Apparence</b><small id="appearanceText">Clair</small></span><em>›</em></button>
+            <button class="settings-row"><span class="row-icon">♪</span><span><b>Sons</b><small>Activés</small></span><button class="toggle on setting-toggle"><span></span></button></button>
+            <button class="settings-row"><span class="row-icon">i</span><span><b>À propos</b><small>Eléa · Votre histoire continue</small></span><em>›</em></button>
+          </div>
+          <button class="delete-elea">Supprimer Éléa</button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal hidden" id="memoryModal" aria-hidden="true">
+    <div class="modal-backdrop"></div>
+    <div class="modal-card">
+      <button class="modal-close" id="closeMemory">×</button>
+      <div class="heading-icon">◈</div><p class="eyebrow">✦ Nouveau souvenir</p><h2>Qu’aimerais-tu qu’Éléa retienne ?</h2>
+      <p>Ajoute quelque chose d’important pour votre histoire.</p>
+      <textarea id="newMemory" placeholder="Ex. J'aime écouter de la musique quand je travaille..."></textarea>
+      <div class="modal-actions"><button class="secondary-btn" id="cancelMemory">Annuler</button><button class="primary-btn" id="saveMemory">Enregistrer</button></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
