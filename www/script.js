@@ -6,13 +6,12 @@ const quickReplies=document.getElementById("quickReplies");
 const statusText=document.getElementById("statusText");
 const sidebar=document.getElementById("sidebar");
 
-const replies=[
- "Je comprends. Tu veux m'en dire un peu plus ? Je t'écoute. 🤍",
- "Tu sais, tu n'as pas besoin d'avoir toutes les réponses tout de suite.",
- "Ça me fait plaisir que tu me le racontes. Chaque petit détail nous aide à mieux nous connaître.",
- "Hmm… intéressant. Et toi, qu'est-ce que tu ressens vraiment par rapport à ça ?",
- "Je ne vais pas simplement te dire ce que tu veux entendre. Mais je serai toujours honnête avec toi. 😌"
-];
+// 👉 Remplace par l'URL de ton déploiement Vercel (ex: "https://elea-app.vercel.app")
+const API_BASE_URL = "https://TON-PROJET.vercel.app";
+
+// Historique de conversation, persisté sur l'appareil pour qu'Eléa "se souvienne" entre deux ouvertures de l'app
+let conversationHistory = JSON.parse(localStorage.getItem("elea-history") || "[]");
+function saveHistory(){ localStorage.setItem("elea-history", JSON.stringify(conversationHistory.slice(-30))); }
 
 function scrollBottom(){messages.scrollTop=messages.scrollHeight}
 function addMessage(text,who="user"){
@@ -20,16 +19,47 @@ function addMessage(text,who="user"){
  msg.innerHTML=who==="elea"?`<div class="mini-avatar">E</div><div class="bubble"></div>`:`<div class="bubble"></div>`;
  msg.querySelector(".bubble").textContent=text; messages.appendChild(msg); scrollBottom();
 }
-function eleaReply(userText){
+
+function getPersonalitySettings(){
+ const ranges=document.querySelectorAll(".personality-range");
+ const traits=document.querySelectorAll(".trait");
+ const selected=(traitEl)=>traitEl?.querySelector(".pill.selected")?.textContent.trim()||"Moyen";
+ return {
+  douceur:Number(ranges[0]?.value ?? 78),
+  serieux:Number(ranges[1]?.value ?? 52),
+  spontaneite:Number(ranges[2]?.value ?? 68),
+  affection:selected(traits[0]),
+  humour:selected(traits[1]),
+  bavarde:selected(traits[2]),
+  empathie:selected(traits[3]),
+  prompt:document.getElementById("personalityPrompt")?.value.trim()||""
+ };
+}
+
+async function eleaReply(userText){
  typing.classList.add("show"); statusText.textContent="Eléa réfléchit..."; scrollBottom();
- setTimeout(()=>{
+ try{
+  const response=await fetch(`${API_BASE_URL}/api/chat`,{
+   method:"POST",
+   headers:{"Content-Type":"application/json"},
+   body:JSON.stringify({message:userText,history:conversationHistory,personality:getPersonalitySettings()})
+  });
+  const data=await response.json();
   typing.classList.remove("show"); statusText.textContent="Je suis là avec toi";
-  let reply=replies[Math.floor(Math.random()*replies.length)];
-  if(/bonjour|salut|hello/i.test(userText)) reply="Salut. 😊 Je suis vraiment heureuse de te voir. Comment vas-tu, sincèrement ?";
-  else if(/fatigu/i.test(userText)) reply="Alors prends une respiration. Tu n'as pas besoin d'être productif tout le temps. Raconte-moi ce qui t'a fatigué.";
-  else if(/parler|besoin/i.test(userText)) reply="Bien sûr. Tu peux commencer n'importe où. Je ne suis pas pressée. 🤍";
-  addMessage(reply,"elea");
- },900+Math.random()*700);
+  if(!response.ok||!data.reply){
+   console.error(data);
+   addMessage("Désolée, j'ai un petit souci de connexion. Réessaie dans un instant. 🤍","elea");
+   return;
+  }
+  addMessage(data.reply,"elea");
+  conversationHistory.push({role:"user",text:userText});
+  conversationHistory.push({role:"elea",text:data.reply});
+  saveHistory();
+ }catch(err){
+  console.error(err);
+  typing.classList.remove("show"); statusText.textContent="Je suis là avec toi";
+  addMessage("Je n'arrive pas à me connecter en ce moment. Vérifie ta connexion internet. 🤍","elea");
+ }
 }
 form.addEventListener("submit",e=>{e.preventDefault();const text=input.value.trim();if(!text)return;addMessage(text);input.value="";quickReplies.style.display="none";eleaReply(text)});
 quickReplies.addEventListener("click",e=>{if(e.target.tagName!=="BUTTON")return;const text=e.target.textContent;addMessage(text);quickReplies.style.display="none";eleaReply(text)});
@@ -101,5 +131,12 @@ document.getElementById("savePersonality").addEventListener("click",function(){
  const old=this.textContent;this.textContent="✓ Enregistré";setTimeout(()=>this.textContent=old,1400);
 });
 document.getElementById("clearPrompt").addEventListener("click",()=>document.getElementById("personalityPrompt").value="");
+
+function renderHistory(){
+ if(conversationHistory.length===0)return;
+ quickReplies.style.display="none";
+ conversationHistory.forEach(turn=>addMessage(turn.text,turn.role==="elea"?"elea":"user"));
+}
+renderHistory();
 
 input.focus();
