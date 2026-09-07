@@ -31,7 +31,7 @@ jobs:
         run: |
           cordova create app com.djulens.cryptolecture CryptoLecture
           rm -rf app/www/*
-          cp -r Elea-/www/* app/www/
+          cp -r www/* app/www/
 
       - name: Add Android platform
         working-directory: app
