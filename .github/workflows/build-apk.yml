@@ -29,7 +29,7 @@ jobs:
 
       - name: Create Cordova project
         run: |
-          cordova create app com.example.myapp MyApp
+          cordova create app com.djulens.cryptolecture CryptoLecture
           rm -rf app/www/*
           cp -r Elea-/www/* app/www/
 
