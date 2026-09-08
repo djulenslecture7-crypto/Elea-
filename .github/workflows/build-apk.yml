@@ -29,9 +29,46 @@ jobs:
 
       - name: Create Cordova project
         run: |
-          cordova create app com.djulens.cryptolecture CryptoLecture
+          cordova create app com.djulens.cryptolecture Eléa
           rm -rf app/www/*
           cp -r www/* app/www/
+
+      - name: Set app icon
+        run: |
+          mkdir -p app/res/icon/android
+          cp assets/icon.png app/res/icon/android/icon-ldpi.png
+          cp assets/icon.png app/res/icon/android/icon-mdpi.png
+          cp assets/icon.png app/res/icon/android/icon-hdpi.png
+          cp assets/icon.png app/res/icon/android/icon-xhdpi.png
+          cp assets/icon.png app/res/icon/android/icon-xxhdpi.png
+          cp assets/icon.png app/res/icon/android/icon-xxxhdpi.png
+
+      - name: Update config.xml with icon
+        working-directory: app
+        run: |
+          python3 - <<'EOF'
+          import re
+
+          with open("config.xml", "r", encoding="utf-8") as f:
+              content = f.read()
+
+          icon_block = '''
+              <platform name="android">
+                  <icon density="ldpi" src="res/icon/android/icon-ldpi.png" />
+                  <icon density="mdpi" src="res/icon/android/icon-mdpi.png" />
+                  <icon density="hdpi" src="res/icon/android/icon-hdpi.png" />
+                  <icon density="xhdpi" src="res/icon/android/icon-xhdpi.png" />
+                  <icon density="xxhdpi" src="res/icon/android/icon-xxhdpi.png" />
+                  <icon density="xxxhdpi" src="res/icon/android/icon-xxxhdpi.png" />
+              </platform>
+          '''
+
+          if "<platform name=\"android\">" not in content:
+              content = content.replace("</widget>", icon_block + "</widget>")
+
+          with open("config.xml", "w", encoding="utf-8") as f:
+              f.write(content)
+          EOF
 
       - name: Add Android platform
         working-directory: app
