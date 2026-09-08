@@ -46,7 +46,6 @@ export default async function handler(req, res) {
           generationConfig: {
             temperature: 0.9,
             maxOutputTokens: 800,
-            thinkingConfig: { thinkingBudget: 0 },
           },
           safetySettings: [
             { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_ONLY_HIGH' },
