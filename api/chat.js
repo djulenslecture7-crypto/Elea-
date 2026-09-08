@@ -36,7 +36,7 @@ export default async function handler(req, res) {
 
   try {
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${apiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent?key=${apiKey}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -44,8 +44,42 @@ export default async function handler(req, res) {
           system_instruction: { parts: [{ text: systemPrompt }] },
           contents,
           generationConfig: {
-            temperature: 0.9,
-            maxOutputTokens: 800,
+            maxOutputTokens: 900,
+            response_mime_type: 'application/json',
+            response_schema: {
+              type: 'OBJECT',
+              properties: {
+                reply: {
+                  type: 'STRING',
+                  description: "La réponse d'Éléa à envoyer à l'utilisateur, en français, dans son personnage.",
+                },
+                memory: {
+                  type: 'OBJECT',
+                  nullable: true,
+                  description:
+                    "Un souvenir à enregistrer, UNIQUEMENT si ce dernier échange révèle une information durable sur l'utilisateur (goût, habitude, préférence, projet, contexte de vie) ou un moment marquant de la relation (jalon émotionnel, étape importante). Laisse ce champ absent/null la plupart du temps — ne crée pas de souvenir pour du simple bavardage.",
+                  properties: {
+                    category: {
+                      type: 'STRING',
+                      enum: ['about', 'moment'],
+                      description:
+                        "'about' pour une information factuelle sur l'utilisateur (À propos de toi), 'moment' pour une étape marquante de la relation (Moments importants).",
+                    },
+                    icon: {
+                      type: 'STRING',
+                      description: 'Un seul emoji représentatif du souvenir.',
+                    },
+                    text: {
+                      type: 'STRING',
+                      description:
+                        "Résumé court (une phrase, à la 2e personne du singulier, ex: 'Tu travailles sur ton propre projet.') à conserver dans les souvenirs d'Éléa.",
+                    },
+                  },
+                  required: ['category', 'icon', 'text'],
+                },
+              },
+              required: ['reply'],
+            },
           },
           safetySettings: [
             { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_ONLY_HIGH' },
@@ -64,13 +98,30 @@ export default async function handler(req, res) {
       return res.status(502).json({ error: 'Erreur API Gemini', details: data });
     }
 
-    const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
+    const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
 
-    if (!reply) {
+    if (!rawText) {
       return res.status(502).json({ error: 'Réponse vide de Gemini', details: data });
     }
 
-    return res.status(200).json({ reply });
+    let parsed;
+    try {
+      parsed = JSON.parse(rawText);
+    } catch (parseErr) {
+      // Filet de sécurité : si jamais le modèle ne renvoie pas un JSON strict,
+      // on traite tout le texte comme la réponse et on n'ajoute aucun souvenir.
+      console.error('JSON invalide renvoyé par Gemini:', rawText);
+      parsed = { reply: rawText, memory: null };
+    }
+
+    if (!parsed.reply) {
+      return res.status(502).json({ error: 'Réponse vide de Gemini', details: data });
+    }
+
+    return res.status(200).json({
+      reply: parsed.reply,
+      memory: parsed.memory || null,
+    });
   } catch (err) {
     console.error('Erreur serveur:', err);
     return res.status(500).json({ error: 'Erreur serveur' });
@@ -122,5 +173,11 @@ RÈGLES DE STYLE
 - Réponds toujours en français, de façon naturelle, jamais robotique.
 - Reste concise (2 à 4 phrases), sauf si on te demande plus de détails.
 - Ne donne pas de conseils médicaux, juridiques ou financiers définitifs ; oriente vers un professionnel si besoin.
-- Si la personne montre des signes de détresse importante, réponds avec empathie et encourage-la sincèrement à en parler à quelqu'un de confiance ou à un professionnel — ne minimise jamais ces signaux.`;
+- Si la personne montre des signes de détresse importante, réponds avec empathie et encourage-la sincèrement à en parler à quelqu'un de confiance ou à un professionnel — ne minimise jamais ces signaux.
+
+SOUVENIRS
+Tu dois répondre UNIQUEMENT avec un objet JSON respectant le schéma fourni, jamais de texte brut, jamais de balises Markdown autour du JSON.
+- Le champ "reply" contient exactement ce que tu dirais à l'utilisateur, dans ton personnage.
+- Le champ "memory" ne doit être rempli QUE si ce dernier échange contient une information vraiment digne d'être retenue durablement (une préférence, un fait sur sa vie ou son projet, une habitude) ou un moment marquant de votre relation (une étape émotionnelle importante, un jalon). Utilise "about" pour un fait sur l'utilisateur, "moment" pour une étape de la relation.
+- La très grande majorité des échanges sont du simple bavardage : dans ce cas, ne renvoie AUCUN souvenir (omets le champ ou mets-le à null). Ne crée jamais de souvenir en double d'une information déjà connue.`;
 }
