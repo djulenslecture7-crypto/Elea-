@@ -151,7 +151,7 @@ function loadPersonality(){
 const savedPersonality = loadPersonality();
 applyPersonalityToUI(savedPersonality || DEFAULT_PERSONALITY);
 
-
+function scrollBottom(){messages.scrollTop=messages.scrollHeight}
 function addMessage(text,who="user"){
  const msg=document.createElement("div"); msg.className=`message ${who}`;
  msg.innerHTML=who==="elea"?`<div class="mini-avatar">E</div><div class="bubble"></div>`:`<div class="bubble"></div>`;
