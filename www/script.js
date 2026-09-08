@@ -174,14 +174,21 @@ function getPersonalitySettings(){
  };
 }
 
+let isSending = false;
 async function eleaReply(userText){
- typing.classList.add("show"); statusText.textContent="Eléa réfléchit..."; scrollBottom();
+ isSending = true;
  try{
+  input.disabled = true;
+  typing.classList.add("show"); statusText.textContent="Eléa réfléchit..."; scrollBottom();
+  const controller = new AbortController();
+  const timeoutId = setTimeout(()=>controller.abort(), 25000);
   const response=await fetch(`${API_BASE_URL}/api/chat`,{
    method:"POST",
    headers:{"Content-Type":"application/json"},
-   body:JSON.stringify({message:userText,history:conversationHistory,personality:getPersonalitySettings()})
+   body:JSON.stringify({message:userText,history:conversationHistory,personality:getPersonalitySettings()}),
+   signal: controller.signal
   });
+  clearTimeout(timeoutId);
   const data=await response.json();
   typing.classList.remove("show"); statusText.textContent="Je suis là avec toi";
   if(!response.ok||!data.reply){
@@ -201,10 +208,26 @@ async function eleaReply(userText){
   console.error(err);
   typing.classList.remove("show"); statusText.textContent="Je suis là avec toi";
   addMessage("Je n'arrive pas à me connecter en ce moment. Vérifie ta connexion internet. 🤍","elea");
+ }finally{
+  isSending = false; input.disabled = false; input.focus();
  }
 }
-form.addEventListener("submit",e=>{e.preventDefault();const text=input.value.trim();if(!text)return;addMessage(text);input.value="";quickReplies.style.display="none";eleaReply(text)});
-quickReplies.addEventListener("click",e=>{if(e.target.tagName!=="BUTTON")return;const text=e.target.textContent;addMessage(text);quickReplies.style.display="none";eleaReply(text)});
+// Filet de sécurité : si une erreur inattendue échappe malgré tout au try/catch ci-dessus,
+// on l'affiche quand même au lieu de laisser Éléa silencieuse et l'input bloqué.
+window.addEventListener("unhandledrejection", e=>{
+ console.error("Erreur non gérée:", e.reason);
+ isSending = false; input.disabled = false;
+ typing.classList.remove("show"); statusText.textContent="Je suis là avec toi";
+ addMessage("Un problème inattendu est survenu. Réessaie dans un instant. 🤍","elea");
+});
+window.addEventListener("error", e=>{
+ console.error("Erreur JS:", e.error || e.message);
+ isSending = false; input.disabled = false;
+});
+form.addEventListener("submit",e=>{e.preventDefault();if(isSending)return;const text=input.value.trim();if(!text)return;addMessage(text);input.value="";quickReplies.style.display="none";eleaReply(text)});
+quickReplies.addEventListener("click",e=>{if(e.target.tagName!=="BUTTON"||isSending)return;const text=e.target.textContent;addMessage(text);quickReplies.style.display="none";eleaReply(text)});
+
+
 
 const sections=["chat","memory","gallery","voice","personality","settings"];
 function showSection(section){
