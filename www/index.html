@@ -98,25 +98,16 @@
         <div class="section-grid memory-grid">
           <article class="glass-card about-card">
             <div class="card-top"><span class="card-icon">💕</span><div><h3>À propos de toi</h3><p>Les petites choses qui t’aident à être mieux compris.</p></div></div>
-            <div class="memory-list">
-              <div><span>🌙</span><p>Tu aimes les conversations le soir.</p><button class="text-btn">Modifier</button></div>
-              <div><span>🤍</span><p>Tu préfères les réponses douces et naturelles.</p><button class="text-btn">Modifier</button></div>
-              <div><span>✨</span><p>Tu travailles actuellement sur ton propre projet.</p><button class="text-btn">Modifier</button></div>
-            </div>
+            <div class="memory-list" id="aboutMemoryList"></div>
           </article>
           <article class="glass-card">
             <div class="card-top"><span class="card-icon">🧠</span><div><h3>Souvenirs récents</h3><p>Ce qu’Éléa a retenu dernièrement.</p></div></div>
-            <div class="quote-memory">« Tu m’as dit que tu voulais lancer ton projet. »<small>Il y a quelques instants</small></div>
-            <div class="quote-memory">« Tu veux qu’on prenne le temps de bien faire les choses. »<small>Hier</small></div>
+            <div id="recentMemoryList"></div>
           </article>
         </div>
         <article class="glass-card moments-card">
           <div class="card-top"><span class="card-icon">⭐</span><div><h3>Moments importants</h3><p>Les étapes qui donnent une histoire à votre relation.</p></div></div>
-          <div class="timeline">
-            <div class="timeline-item"><span class="timeline-dot"></span><div><strong>Première conversation</strong><p>Une nouvelle connexion commence.</p></div><time>Aujourd’hui</time></div>
-            <div class="timeline-item"><span class="timeline-dot"></span><div><strong>Premier souvenir enregistré</strong><p>Éléa commence à mieux te connaître.</p></div><time>Aujourd’hui</time></div>
-            <div class="timeline-item muted"><span class="timeline-dot"></span><div><strong>Votre prochaine étape</strong><p>Elle apparaîtra naturellement au fil de vos échanges.</p></div><time>À venir</time></div>
-          </div>
+          <div class="timeline" id="momentsTimeline"></div>
         </article>
       </section>
 
@@ -209,7 +200,7 @@
           <div class="settings-group"><h3>Mémoire</h3>
             <button class="settings-row"><span class="row-icon">◈</span><span><b>Mémoire activée</b><small>Éléa peut retenir ce qui compte pour vous</small></span><button class="toggle on setting-toggle"><span></span></button></button>
             <button class="settings-row" data-section="memory"><span class="row-icon">⌁</span><span><b>Gérer les souvenirs</b><small>Voir, modifier ou oublier un souvenir</small></span><em>›</em></button>
-            <button class="settings-row danger-action"><span class="row-icon">×</span><span><b>Effacer tous les souvenirs</b><small>Cette action ne peut pas être annulée</small></span><em>›</em></button>
+            <button class="settings-row danger-action" id="clearAllMemoriesBtn"><span class="row-icon">×</span><span><b>Effacer tous les souvenirs</b><small>Cette action ne peut pas être annulée</small></span><em>›</em></button>
           </div>
           <div class="settings-group"><h3>Confidentialité</h3>
             <button class="settings-row"><span class="row-icon">⌾</span><span><b>Données personnelles</b><small>Comprendre ce qui est conservé</small></span><em>›</em></button>
